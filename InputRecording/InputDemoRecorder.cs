@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace InputDemoRecorder
@@ -10,7 +7,7 @@ namespace InputDemoRecorder
     class InputDemoRecorder : MonoBehaviour
     {
         private int currentUpdateFrame = 0;
-        public static Queue<FrameInputRecorder> framesInputs = new Queue<FrameInputRecorder > ();
+        public static List<FrameInputRecorder> framesInputs = new List<FrameInputRecorder>();
 
         private void Awake()
         {
@@ -35,7 +32,7 @@ namespace InputDemoRecorder
                         else
                             inputRecorder.AddButtonInput(Channels[i].channelName, new ButtonInputRecorder(Channels[i].channel));
                     }
-                    framesInputs.Enqueue(inputRecorder);
+                    framesInputs.Add(inputRecorder);
 
                     currentUpdateFrame++;
                 }

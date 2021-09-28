@@ -6,6 +6,12 @@
         public bool ButtonDown;
         public bool ButtonUp;
 
+        public ButtonInputRecorder(bool button, bool buttonDown, bool buttonUp)
+        {
+            Button = button;
+            ButtonDown = buttonDown;
+            ButtonUp = buttonUp;
+        }
         public ButtonInputRecorder(InputChannel button)
         {
             Button = button.GetButton();
