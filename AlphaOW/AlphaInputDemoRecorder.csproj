@@ -7,8 +7,8 @@
     <ProjectGuid>{8034C813-8D42-464F-8F65-11D8F8C8C37B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InputDemoRecorder</RootNamespace>
-    <AssemblyName>InputDemoRecorder</AssemblyName>
+    <RootNamespace>AlphaInputDemoRecorder</RootNamespace>
+    <AssemblyName>AlphaInputDemoRecorder</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -61,8 +61,6 @@
     <Compile Include="InputDemoPlayer.cs" />
     <Compile Include="InputRecording\InputDemoRecorder.cs" />
     <Compile Include="InputDemoRecorderStart.cs" />
-    <Compile Include="InputGiver\ClientInputChannels.cs" />
-    <Compile Include="InputGiver\NetworkedInputChannel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace InputDemoRecorder
 {
     public class DemoFileLoader
     {
-        static public FrameInputRecorder[] LoadedDemoFile;
         public const string DEMO_FILE_EXTENSION = ".owdemo";
 
-        public static bool SaveDemoFile(string filePath, string demoName, params FrameInputRecorder[] recordedFrameInputs)
+        public static bool SaveDemoFile(string filePath, string demoName, InputsCurveRecorder recordedFrameInputs)
         {
-            if (recordedFrameInputs.Length <= 0)
+            if (recordedFrameInputs.InputCurves.Count <= 0)
                 return false;
             var stream = new MemoryStream();
             BinaryWriter binaryWriter = new BinaryWriter(stream);
@@ -24,18 +20,14 @@ namespace InputDemoRecorder
             binaryWriter.Write(demoName); //Saved demo name
             binaryWriter.Write(DateTime.UtcNow.ToBinary()); //Time it was saved
 
-            binaryWriter.Write(recordedFrameInputs[0].GetDictionaryOrdersInBytes()); //Dictionary Order
-
-            binaryWriter.Write(recordedFrameInputs.Length); //Frame Inputs
-            for (int i = 0; i < recordedFrameInputs.Length; i++)
-                binaryWriter.Write(recordedFrameInputs[i].FrameInputRecorderInBytes());
+            binaryWriter.Write(recordedFrameInputs.InputsCurveRecorderInBytes());
 
             binaryWriter.Close();
             File.WriteAllBytes(Path.Combine(filePath, demoName + DEMO_FILE_EXTENSION), stream.ToArray());
             return true;
         }
 
-        public static bool LoadDemoFile(string fileName)
+        public static bool LoadDemoFile(string fileName, out InputsCurveRecorder loadedDemoFile)
         {
             byte[] fileBuffer = File.ReadAllBytes(fileName);
             var stream = new MemoryStream(fileBuffer);
@@ -46,30 +38,7 @@ namespace InputDemoRecorder
             string demoName = binaryReader.ReadString();
             DateTime demoSaveTime = DateTime.FromBinary(binaryReader.ReadInt64());
 
-            //Dictionary order
-            string[] axisInputChannels = new string[binaryReader.ReadInt32()];
-            for(int i=0; i< axisInputChannels.Length; i++)
-                axisInputChannels[i] = binaryReader.ReadString();
-
-            string[] buttonsInputChannels = new string[binaryReader.ReadInt32()];
-            for (int i = 0; i < buttonsInputChannels.Length; i++)
-                buttonsInputChannels[i] = binaryReader.ReadString();
-
-            //Frame Inputs
-            int amountOfFrameInputs = binaryReader.ReadInt32();
-            LoadedDemoFile = new FrameInputRecorder[amountOfFrameInputs];
-            for (int i = 0; i < LoadedDemoFile.Length; i++)
-            {
-                FrameInputRecorder frameInputRecorder = new FrameInputRecorder(i);
-                for (int j =0; j< axisInputChannels.Length; j++)
-                    frameInputRecorder.AddAxisInput(axisInputChannels[j], new AxisInputRecorder(binaryReader.ReadSingle(), binaryReader.ReadSingle()));
-
-                for (int j = 0; j < buttonsInputChannels.Length; j++)
-                    frameInputRecorder.AddButtonInput(buttonsInputChannels[j], new ButtonInputRecorder(binaryReader.ReadBoolean(), binaryReader.ReadBoolean(), binaryReader.ReadBoolean()));
-
-                LoadedDemoFile[i] = frameInputRecorder;
-            }
-
+            loadedDemoFile = InputsCurveRecorder.InputsCurveRecorderFromBytes(binaryReader);
             return true;
         }
     }

@@ -45,9 +45,6 @@
     <Reference Include="BepInEx">
       <HintPath>..\..\..\..\..\OuterWilds Alpha 1_2\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
-    <Reference Include="CAMOWA">
-      <HintPath>..\CAMOWA\bin\Release\CAMOWA.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -58,18 +55,17 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoFileLoader.cs" />
-    <Compile Include="InputRecording\AxisInputRecorder.cs" />
-    <Compile Include="InputRecording\ButtonInputRecorder.cs" />
-    <Compile Include="InputRecording\FrameInputRecorder.cs" />
+    <Compile Include="InputRecording\InputsCurveRecorder.cs" />
     <Compile Include="InputChannelPatches.cs" />
     <Compile Include="InputDemoPlayer.cs" />
     <Compile Include="InputRecording\InputDemoRecorder.cs" />
     <Compile Include="InputDemoRecorderStart.cs" />
-    <Compile Include="InputGiver\ClientInputChannels.cs" />
-    <Compile Include="InputGiver\NetworkedInputChannel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

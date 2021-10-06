@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace InputDemoRecorder
 {
-    public class DemoFileLoader
+    public class AlphaInputDemoRecorder
     {
         static public FrameInputRecorder[] LoadedDemoFile;
-        public const string DEMO_FILE_EXTENSION = ".owdemo";
+        public const string DEMO_FILE_EXTENSION = ".owademo";
 
         public static bool SaveDemoFile(string filePath, string demoName, params FrameInputRecorder[] recordedFrameInputs)
         {

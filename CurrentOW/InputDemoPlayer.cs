@@ -1,89 +1,48 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace InputDemoRecorder
 {
-    public class InputDemoPlayer : MonoBehaviour
+    public static class InputDemoPlayer
     {
-        private bool stopPlaying = false;
-        private int currentUpdateFrame = 0;
-        FrameInputRecorder[] frameInputs;
+        private static float currentInputTime;
+        private static float startPlaybackTime;
+        static InputsCurveRecorder InputsCurve;
 
-        private void Awake()
+        public static float GetCurrentInputTime() => currentInputTime;
+
+        static InputDemoPlayer()
         {
-            if (DemoFileLoader.LoadedDemoFile == null)
-            {
-                Destroy(this);
-                return;
-            }
-
-            InputChannelPatches.AllowChangeInputs();
-            foreach (string channelName in InputChannelPatches.InputChannelsEdited.Keys)
-            {
-                InputChannelPatches.InputChannelsEdited[channelName].GetAxis = () => ReturnAxisValue(channelName);
-                InputChannelPatches.InputChannelsEdited[channelName].GetAxisRaw = () => ReturnRawAxisValue(channelName);
-
-                InputChannelPatches.InputChannelsEdited[channelName].GetButton = () => ReturnButtonValue(channelName);
-                InputChannelPatches.InputChannelsEdited[channelName].GetButtonDown = () => ReturnButtonDownValue(channelName);
-                InputChannelPatches.InputChannelsEdited[channelName].GetButtonUp = () => ReturnButtonUpValue(channelName);
-            }
-            frameInputs = DemoFileLoader.LoadedDemoFile;
-            StartCoroutine("InputUpdate");
+            InputChannelPatches.OnUpdateInputs += InputChannelPatches_OnUpdateInputs;
         }
-        private float ReturnAxisValue(string channelName)
+        public static void StartPlayback(InputsCurveRecorder demoFile)
         {
-            if (currentUpdateFrame < frameInputs.Length)
-                return frameInputs[currentUpdateFrame].GetAxisInput(channelName).Axis;
-            return 0f;
+            InputChannelPatches.ResetInputChannelEdited();
+            InputChannelPatches.SetInputChanger(ReturnInputCommandValue);
+
+            startPlaybackTime = Time.time;
         }
-        private float ReturnRawAxisValue(string channelName)
+        public static void StopPlayback()
         {
-            if (currentUpdateFrame < frameInputs.Length)
-                return frameInputs[currentUpdateFrame].GetAxisInput(channelName).AxisRaw;
-            return 0f;
+            InputChannelPatches.AllowChangeInputs(false);
         }
 
-        private bool ReturnButtonValue(string channelName)
+        private static void InputChannelPatches_OnUpdateInputs()
         {
-            if (currentUpdateFrame < frameInputs.Length)
-                return frameInputs[currentUpdateFrame].GetButtonInput(channelName).Button;
-            return false;
-        }
-        private bool ReturnButtonDownValue(string channelName)
-        {
-            if (currentUpdateFrame < frameInputs.Length)
-                return frameInputs[currentUpdateFrame].GetButtonInput(channelName).ButtonDown;
-            return false;
-        }
-        private bool ReturnButtonUpValue(string channelName)
-        {
-            if (currentUpdateFrame < frameInputs.Length)
-                return frameInputs[currentUpdateFrame].GetButtonInput(channelName).ButtonUp;
-            return false;
+            currentInputTime = Time.time - startPlaybackTime;
         }
 
-        private IEnumerator InputUpdate()
+        private static void ReturnInputCommandValue(InputConsts.InputCommandType commandType, ref Vector2 axisValue)
         {
-            while (!stopPlaying)
-            {
-                yield return new WaitForFixedUpdate();
-                //Give the inputs in currentUpdateFrame
-                if (Time.timeScale > 0f)
-                    currentUpdateFrame++;
-
-                if (currentUpdateFrame >= frameInputs.Length)
-                {
-                    stopPlaying = true;
-                    InputChannelPatches.AllowChangeInputs(false);
-                }
-            }
+            if (InputsCurve.InputCurves.TryGetValue(commandType, out var curves))
+                axisValue = new Vector2(curves[0].Evaluate(currentInputTime), curves[1].Evaluate(currentInputTime));
         }
-        private void OnGUI()
-        {
-            if (stopPlaying)
-                return;
-            GUI.Box(new Rect(0, 0, 200, 20), "Update Frame: " + currentUpdateFrame);
-            GUI.Box(new Rect(0, 20, 200, 20), "Playing back...");
-        }
+        
+        //private static void OnGUI()
+        //{
+        //    if (!play)
+        //        return;
+        //    GUI.Box(new Rect(0, 0, 200, 20), "Current Frame Time: " + currentInputTime);
+        //    GUI.Box(new Rect(0, 20, 200, 20), "Playing back...");
+        //}
     }
 }

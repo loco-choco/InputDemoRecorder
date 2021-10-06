@@ -11,7 +11,7 @@ namespace InputDemoRecorder
 
         private void Awake()
         {
-            if (DemoFileLoader.LoadedDemoFile == null)
+            if (AlphaInputDemoRecorder.LoadedDemoFile == null)
             {
                 Destroy(this);
                 return;
@@ -27,7 +27,7 @@ namespace InputDemoRecorder
                 InputChannelPatches.InputChannelsEdited[channelName].GetButtonDown = () => ReturnButtonDownValue(channelName);
                 InputChannelPatches.InputChannelsEdited[channelName].GetButtonUp = () => ReturnButtonUpValue(channelName);
             }
-            frameInputs = DemoFileLoader.LoadedDemoFile;
+            frameInputs = AlphaInputDemoRecorder.LoadedDemoFile;
             StartCoroutine("InputUpdate");
         }
         private float ReturnAxisValue(string channelName)
