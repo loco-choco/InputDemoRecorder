@@ -78,9 +78,11 @@ namespace InputDemoRecorder
             if (GUI.Button(new Rect(200, 0, 100, 20), "Stop Recording"))
             {
                 latestRecording = InputDemoRecorder.StopRecording();
-                isRecording = true;
+                InputChannelPatches.ResetInputChannelEdited();
+
+                isRecording = false;
             }
-            GUI.TextArea(new Rect(200, 20, 100, 20), "Current Recording Time: " + InputDemoRecorder.GetCurrentInputTime());
+            GUI.Label(new Rect(200, 20, 100, 20), "Time: " + InputDemoRecorder.GetCurrentInputTime());
         }
 
         bool isPlayingback = false;
@@ -89,9 +91,11 @@ namespace InputDemoRecorder
             if (GUI.Button(new Rect(200, 0, 100, 20), "Stop Playingback"))
             {
                 InputDemoPlayer.StopPlayback();
+                InputChannelPatches.ResetInputChannelEdited();
+
                 isPlayingback = false;
             }
-            GUI.TextArea(new Rect(200, 20, 100, 20), "Current Playback Time: " + InputDemoPlayer.GetCurrentInputTime());
+            GUI.Label(new Rect(200, 20, 100, 20), "Time: " + InputDemoPlayer.GetCurrentInputTime());
         }
-    }
+    }   
 }
