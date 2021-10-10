@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
 namespace InputDemoRecorder
@@ -8,18 +9,12 @@ namespace InputDemoRecorder
         static readonly MethodInfo axisValueGetter = AccessTools.PropertyGetter(typeof(AbstractCommands), "AxisValue");
         static readonly MethodInfo axisValueSetter = AccessTools.PropertySetter(typeof(AbstractCommands), "AxisValue");
 
-        static readonly MethodInfo consumedGetter = AccessTools.PropertyGetter(typeof(AbstractCommands), "Consumed");
+        static readonly MethodInfo isActiveThisFrameSetter = AccessTools.PropertySetter(typeof(AbstractCommands), "IsActiveThisFrame");
 
         private static bool ChangeInputs = false;
 
         public delegate void InputData(InputConsts.InputCommandType commandType, ref Vector2 value);
         private static InputData InputChanger;
-
-        public delegate void NewlyButtonData(InputConsts.InputCommandType commandType, ref bool value, bool consumed);
-        public delegate void PressedButtonData(InputConsts.InputCommandType commandType, ref bool value, float minPressDuration);
-        private static PressedButtonData IsPressedChanger;
-        private static NewlyButtonData IsNewlyPressedChanger;
-        private static NewlyButtonData IsNewlyReleasedChanger;
 
         public delegate void UpdateInputs();
         public static event UpdateInputs OnUpdateInputs;
@@ -29,16 +24,12 @@ namespace InputDemoRecorder
             HarmonyMethod abstractCommandsUpdatePostfix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.SetInputValuePostfix));
             HarmonyMethod inputManagerUpdatePrefix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.UpdateInputsPrefix));
 
-            HarmonyMethod isPressedPostfix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.ReturnIsPressed));
-            HarmonyMethod isNewlyPressedPostfix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.ReturnIsNewlyPressed));
-            HarmonyMethod isNewlyReleasedPostfix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.ReturnIsNewlyReleased));
-
-            harmonyInstance.Patch(typeof(AbstractCommands).GetMethod("Update"), postfix: abstractCommandsUpdatePostfix);
             harmonyInstance.Patch(typeof(InputManager).GetMethod(nameof(InputManager.Update)), prefix: inputManagerUpdatePrefix);
 
-            harmonyInstance.Patch(typeof(InputManager).GetMethod(nameof(InputManager.IsPressed)), postfix: isPressedPostfix);
-            harmonyInstance.Patch(typeof(InputManager).GetMethod(nameof(InputManager.IsNewlyPressed)), postfix: isNewlyPressedPostfix);
-            harmonyInstance.Patch(typeof(InputManager).GetMethod(nameof(InputManager.IsNewlyReleased)), postfix: isNewlyReleasedPostfix);
+            var AbstractInputCommandsTDerivateds = new Type[] { };
+
+            foreach(var type in AbstractInputCommandsTDerivateds)
+                harmonyInstance.Patch(type.GetMethod("UpdateFromAction"), postfix: abstractCommandsUpdatePostfix);
         }
 
         static void UpdateInputsPrefix()
@@ -47,35 +38,20 @@ namespace InputDemoRecorder
         }
         static void SetInputValuePostfix(AbstractCommands __instance)
         {
-            Vector2 axisValue = (Vector2)axisValueGetter.Invoke(__instance, null);
             if (ChangeInputs)
+            {
+                Vector2 axisValue = (Vector2)axisValueGetter.Invoke(__instance, null);
                 InputChanger?.Invoke(__instance.CommandType, ref axisValue);
+                axisValueSetter.Invoke(__instance, new object[] { axisValue });
 
-            axisValueSetter.Invoke(__instance, new object[] { axisValue });
-        }
+                float comparer = (__instance.ValueType == InputConsts.InputValueType.DOUBLE_AXIS) ? float.Epsilon : __instance.PressedThreshold;
+                isActiveThisFrameSetter.Invoke(__instance, new object[] { axisValue.magnitude > comparer });
+            }
 
-        static void ReturnIsPressed(AbstractCommands __instance, ref bool __result, float minPressDuration)
-        {
-            if (ChangeInputs)
-                IsPressedChanger?.Invoke(__instance.CommandType, ref __result, minPressDuration);
         }
-        static void ReturnIsNewlyPressed(AbstractCommands __instance, ref bool __result)
-        {
-            if (ChangeInputs)
-                IsNewlyPressedChanger?.Invoke(__instance.CommandType, ref __result, (bool)consumedGetter.Invoke(__instance, null));
-        }
-        static void ReturnIsNewlyReleased(AbstractCommands __instance, ref bool __result)
-        {
-            if (ChangeInputs)
-                IsNewlyReleasedChanger?.Invoke(__instance.CommandType, ref __result, (bool)consumedGetter.Invoke(__instance, null));
-        }
-
-        public static void SetInputChanger(InputData inputChanger, PressedButtonData isPressedChanger = null, NewlyButtonData isNewlyPressedChanger = null, NewlyButtonData isNewlyReleasedChanger = null)
+        public static void SetInputChanger(InputData inputChanger)
         {
             InputChanger = inputChanger;
-            IsPressedChanger = isPressedChanger;
-            IsNewlyPressedChanger = isNewlyPressedChanger;
-            IsNewlyReleasedChanger = isNewlyReleasedChanger;
         }
         public static void AllowChangeInputs(bool changeInputs = true)
         {
@@ -85,9 +61,6 @@ namespace InputDemoRecorder
         {
             ChangeInputs = false;
             InputChanger = null;
-            IsPressedChanger = null;
-            IsNewlyPressedChanger = null;
-            IsNewlyReleasedChanger = null;
         }
     }
 }
