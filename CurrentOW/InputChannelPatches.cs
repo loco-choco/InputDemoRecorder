@@ -13,6 +13,10 @@ namespace InputDemoRecorder
 
         static readonly MethodInfo isActiveThisFrameSetter = AccessTools.PropertySetter(typeof(AbstractCommands), "IsActiveThisFrame");
 
+        static readonly MethodInfo wasActiveLastFrameGetter = AccessTools.PropertyGetter(typeof(AbstractCommands), "WasActiveLastFrame");
+
+        static readonly MethodInfo inputStartedTimeSetter = AccessTools.PropertySetter(typeof(AbstractCommands), "InputStartedTime");
+
         private static bool ChangeInputs = false;
 
         public delegate void InputData(InputConsts.InputCommandType commandType, ref Vector2 value);
@@ -43,7 +47,21 @@ namespace InputDemoRecorder
                 axisValueSetter.Invoke(__instance, new object[] { axisValue });
 
                 float comparer = (__instance.ValueType == InputConsts.InputValueType.DOUBLE_AXIS) ? float.Epsilon : __instance.PressedThreshold;
-                isActiveThisFrameSetter.Invoke(__instance, new object[] { axisValue.magnitude > comparer });
+                bool isActiveThisFrame = axisValue.magnitude > comparer;
+                isActiveThisFrameSetter.Invoke(__instance, new object[] { isActiveThisFrame });
+
+                bool wasActiveLastFrame = (bool)wasActiveLastFrameGetter.Invoke(__instance, null);
+                if (!isActiveThisFrame)
+                {
+                    if (wasActiveLastFrame)
+                    {
+                        inputStartedTimeSetter.Invoke(__instance, new object[] { float.MaxValue });
+                    }
+                }
+                else if (!wasActiveLastFrame)
+                {
+                    inputStartedTimeSetter.Invoke(__instance, new object[] { Time.realtimeSinceStartup });
+                }
             }
         }
         public static void SetInputChanger(InputData inputChanger)
