@@ -19,7 +19,7 @@ namespace InputDemoRecorder
         {
             InputChannelPatches.SetInputChanger(ReturnInputCommandValue);
             InputsCurve = demoFile;
-            startPlaybackTime = Time.time;
+            startPlaybackTime = Time.unscaledTime;
         }
         public static void StopPlayback()
         {
@@ -28,13 +28,21 @@ namespace InputDemoRecorder
 
         private static void InputChannelPatches_OnUpdateInputs()
         {
-            currentInputTime = Time.time - startPlaybackTime;
+            currentInputTime = Time.unscaledTime - startPlaybackTime;
         }
         
         private static void ReturnInputCommandValue(InputConsts.InputCommandType commandType, ref Vector2 axisValue)
         {
+
             if (InputsCurve.InputCurves.TryGetValue(commandType, out var curves))
-                axisValue = new Vector2(curves[0].Evaluate(currentInputTime), curves[1].Evaluate(currentInputTime));
+            {
+                var input = new Vector2(curves[0].Evaluate(currentInputTime), curves[1].Evaluate(currentInputTime));
+
+                if (commandType != InputConsts.InputCommandType.PAUSE)
+                    axisValue = input;
+                else if (input.magnitude > float.Epsilon)
+                    axisValue = input;
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Reflection.Emit;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,17 +30,17 @@ namespace InputDemoRecorder
         static public void DoPatches(Harmony harmonyInstance)
         {
             HarmonyMethod inputManagerUpdatePrefix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.UpdateInputsPrefix));
-            HarmonyMethod abstractCommandsUpdatePostfix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.SetInputValuePostfix));
+            HarmonyMethod abstractCommandsUpdateTranspiler = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.AbstractCommandsUpdateTranspiler));
 
             harmonyInstance.Patch(typeof(InputManager).GetMethod(nameof(InputManager.Update)), prefix: inputManagerUpdatePrefix);
-            harmonyInstance.Patch(typeof(AbstractCommands).GetMethod("Update"), postfix: abstractCommandsUpdatePostfix);
+            harmonyInstance.Patch(typeof(AbstractCommands).GetMethod("Update"), transpiler: abstractCommandsUpdateTranspiler);
         }
 
         static void UpdateInputsPrefix()
         {
             OnUpdateInputs?.Invoke();
         }
-        public static void SetInputValuePostfix(AbstractCommands __instance)
+        public static void SetInputValue(AbstractCommands __instance)
         {
             if (ChangeInputs)
             {
@@ -47,21 +49,7 @@ namespace InputDemoRecorder
                 axisValueSetter.Invoke(__instance, new object[] { axisValue });
 
                 float comparer = (__instance.ValueType == InputConsts.InputValueType.DOUBLE_AXIS) ? float.Epsilon : __instance.PressedThreshold;
-                bool isActiveThisFrame = axisValue.magnitude > comparer;
-                isActiveThisFrameSetter.Invoke(__instance, new object[] { isActiveThisFrame });
-
-                bool wasActiveLastFrame = (bool)wasActiveLastFrameGetter.Invoke(__instance, null);
-                if (!isActiveThisFrame)
-                {
-                    if (wasActiveLastFrame)
-                    {
-                        inputStartedTimeSetter.Invoke(__instance, new object[] { float.MaxValue });
-                    }
-                }
-                else if (!wasActiveLastFrame)
-                {
-                    inputStartedTimeSetter.Invoke(__instance, new object[] { Time.realtimeSinceStartup });
-                }
+                isActiveThisFrameSetter.Invoke(__instance, new object[] { axisValue.magnitude > comparer });
             }
         }
         public static void SetInputChanger(InputData inputChanger)
@@ -76,6 +64,26 @@ namespace InputDemoRecorder
         {
             ChangeInputs = false;
             InputChanger = null;
+        }
+
+        static IEnumerable<CodeInstruction> AbstractCommandsUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            int index = -1;
+            var codes = new List<CodeInstruction>(instructions);
+            for (var i = 0; i < codes.Count; i++)
+            {
+                if (codes[i].opcode == OpCodes.Ldc_I4_0 && codes[i + 1].opcode == OpCodes.Call && codes[i + 2].opcode == OpCodes.Ldarg_0 && codes[i + 3].opcode == OpCodes.Callvirt)
+                {
+                    index = i + 4;
+                    break;
+                }
+            }
+            if (index > -1)
+            {
+                codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
+                codes.Insert(index + 1, CodeInstruction.Call(typeof(InputChannelPatches), nameof(InputChannelPatches.SetInputValue), new Type[] { typeof(AbstractCommands) }));
+            }
+            return codes;
         }
     }
 }

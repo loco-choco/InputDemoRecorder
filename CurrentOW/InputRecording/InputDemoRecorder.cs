@@ -18,7 +18,7 @@ namespace InputDemoRecorder
 
         private static void InputChannelPatches_OnUpdateInputs()
         {
-            currentInputTime = Time.time - startRecordingTime;
+            currentInputTime = Time.unscaledTime - startRecordingTime;
         }
         public static void StartRecording()
         {
@@ -26,7 +26,7 @@ namespace InputDemoRecorder
             
             InputChannelPatches.SetInputChanger(RecordInputCommandValue);
 
-            startRecordingTime = Time.time;
+            startRecordingTime = Time.unscaledTime;
         }
 
         public static InputsCurveRecorder StopRecording()
