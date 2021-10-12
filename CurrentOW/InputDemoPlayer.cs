@@ -7,7 +7,7 @@ namespace InputDemoRecorder
     {
         private static float currentInputTime;
         private static float startPlaybackTime;
-        static InputsCurveRecorder InputsCurve;
+        private static InputsCurveRecorder InputsCurve;
 
         public static float GetCurrentInputTime() => currentInputTime;
 
@@ -18,12 +18,12 @@ namespace InputDemoRecorder
         public static void StartPlayback(InputsCurveRecorder demoFile)
         {
             InputChannelPatches.SetInputChanger(ReturnInputCommandValue);
-
+            InputsCurve = demoFile;
             startPlaybackTime = Time.time;
         }
         public static void StopPlayback()
         {
-            InputChannelPatches.AllowChangeInputs(false);
+            InputChannelPatches.ResetInputChannelEdited();
         }
 
         private static void InputChannelPatches_OnUpdateInputs()

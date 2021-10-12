@@ -11,15 +11,15 @@ namespace InputDemoRecorder
         public void AddValue(InputConsts.InputCommandType commandType, float frameTime, params float[] values)
         {
             AnimationCurve[] curves;
-
             if (InputCurves.TryGetValue(commandType, out var curvesFromKey))
                 curves = curvesFromKey;
             else
             {
                 curves = new AnimationCurve[values.Length];
+                for (int i = 0; i < curves.Length; i++)
+                    curves[i] = new AnimationCurve();
                 InputCurves.Add(commandType, curves);
             }
-
             for (int i = 0; i < curves.Length && i < values.Length; i++)
                 curves[i].AddKey(frameTime, values[i]);
         }

@@ -45,12 +45,14 @@ namespace InputDemoRecorder
             if (GUI.Button(new Rect(200, 0, 100, 20), "Record"))
             {
                 InputDemoRecorder.StartRecording();
+                InputChannelPatches.AllowChangeInputs(true);
                 isRecording = true;
             }
 
             if (GUI.Button(new Rect(200, 20, 200, 20), "Play Recorded Demo"))
             {
                 InputDemoPlayer.StartPlayback(latestRecording);
+                InputChannelPatches.AllowChangeInputs(true);
                 isPlayingback = true;
             }
 
@@ -67,6 +69,7 @@ namespace InputDemoRecorder
                 DemoFileLoader.LoadDemoFile(Path.Combine(DllExecutablePath, demoName + DemoFileLoader.DEMO_FILE_EXTENSION), out var loadedDemo);
 
                 InputDemoPlayer.StartPlayback(loadedDemo);
+                InputChannelPatches.AllowChangeInputs(true);
                 isPlayingback = true;
             }
         }

@@ -2,6 +2,8 @@
 using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 namespace InputDemoRecorder
 {
     public class InputChannelPatches
@@ -21,22 +23,18 @@ namespace InputDemoRecorder
 
         static public void DoPatches(Harmony harmonyInstance)
         {
-            HarmonyMethod abstractCommandsUpdatePostfix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.SetInputValuePostfix));
             HarmonyMethod inputManagerUpdatePrefix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.UpdateInputsPrefix));
+            HarmonyMethod abstractCommandsUpdatePostfix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.SetInputValuePostfix));
 
             harmonyInstance.Patch(typeof(InputManager).GetMethod(nameof(InputManager.Update)), prefix: inputManagerUpdatePrefix);
-
-            var AbstractInputCommandsTDerivateds = new Type[] { };
-
-            foreach(var type in AbstractInputCommandsTDerivateds)
-                harmonyInstance.Patch(type.GetMethod("UpdateFromAction"), postfix: abstractCommandsUpdatePostfix);
+            harmonyInstance.Patch(typeof(AbstractCommands).GetMethod("Update"), postfix: abstractCommandsUpdatePostfix);
         }
 
         static void UpdateInputsPrefix()
         {
             OnUpdateInputs?.Invoke();
         }
-        static void SetInputValuePostfix(AbstractCommands __instance)
+        public static void SetInputValuePostfix(AbstractCommands __instance)
         {
             if (ChangeInputs)
             {
@@ -47,7 +45,6 @@ namespace InputDemoRecorder
                 float comparer = (__instance.ValueType == InputConsts.InputValueType.DOUBLE_AXIS) ? float.Epsilon : __instance.PressedThreshold;
                 isActiveThisFrameSetter.Invoke(__instance, new object[] { axisValue.magnitude > comparer });
             }
-
         }
         public static void SetInputChanger(InputData inputChanger)
         {

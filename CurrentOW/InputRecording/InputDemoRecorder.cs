@@ -37,8 +37,8 @@ namespace InputDemoRecorder
 
         private static void RecordInputCommandValue(InputConsts.InputCommandType commandType, ref Vector2 axisValue)
         {
-            //if(ChannelsToIgnore.Contains(commandType))
-                recordedInputsCurve.AddValue(commandType, currentInputTime, axisValue.x, axisValue.y);
+            //    if (ChannelsToIgnore.Contains(commandType))
+            recordedInputsCurve.AddValue(commandType, currentInputTime, axisValue.x, axisValue.y);
         }
         private static readonly HashSet<InputConsts.InputCommandType> ChannelsToIgnore = new HashSet<InputConsts.InputCommandType>()
         {
