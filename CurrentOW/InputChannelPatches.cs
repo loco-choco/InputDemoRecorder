@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace InputDemoRecorder
 {
@@ -14,10 +13,6 @@ namespace InputDemoRecorder
         static readonly MethodInfo axisValueSetter = AccessTools.PropertySetter(typeof(AbstractCommands), "AxisValue");
 
         static readonly MethodInfo isActiveThisFrameSetter = AccessTools.PropertySetter(typeof(AbstractCommands), "IsActiveThisFrame");
-
-        static readonly MethodInfo wasActiveLastFrameGetter = AccessTools.PropertyGetter(typeof(AbstractCommands), "WasActiveLastFrame");
-
-        static readonly MethodInfo inputStartedTimeSetter = AccessTools.PropertySetter(typeof(AbstractCommands), "InputStartedTime");
 
         private static bool ChangeInputs = false;
 

@@ -36,14 +36,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\OuterWilds Alpha 1_2\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\OuterWilds Alpha 1_2\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Outer Wilds\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\..\..\..\..\OuterWilds Alpha 1_2\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\TABZ modded v5\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -70,6 +70,7 @@
     <Compile Include="InputDemoPlayer.cs" />
     <Compile Include="InputRecording\InputDemoRecorder.cs" />
     <Compile Include="InputDemoRecorderStart.cs" />
+    <Compile Include="TASFileLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

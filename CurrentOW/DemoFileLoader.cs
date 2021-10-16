@@ -8,7 +8,7 @@ namespace InputDemoRecorder
     {
         public const string DEMO_FILE_EXTENSION = ".owdemo";
 
-        public static bool SaveDemoFile(string filePath, string demoName, InputsCurveRecorder recordedFrameInputs)
+        public static bool SaveDemoFile(string filePath, InputsCurveRecorder recordedFrameInputs)
         {
             if (recordedFrameInputs.InputCurves.Count <= 0)
                 return false;
@@ -17,13 +17,12 @@ namespace InputDemoRecorder
 
             //Metadata
             binaryWriter.Write(Application.unityVersion); // Unity version
-            binaryWriter.Write(demoName); //Saved demo name
             binaryWriter.Write(DateTime.UtcNow.ToBinary()); //Time it was saved
 
             binaryWriter.Write(recordedFrameInputs.InputsCurveRecorderInBytes());
 
             binaryWriter.Close();
-            File.WriteAllBytes(Path.Combine(filePath, demoName + DEMO_FILE_EXTENSION), stream.ToArray());
+            File.WriteAllBytes(Path.Combine(filePath, filePath), stream.ToArray());
             return true;
         }
 
