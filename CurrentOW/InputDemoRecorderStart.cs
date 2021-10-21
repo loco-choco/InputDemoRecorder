@@ -31,6 +31,9 @@ namespace InputDemoRecorder
             var harmonyInstance = new Harmony("locochoco.InputDemoRecorder");
             InputChannelPatches.DoPatches(harmonyInstance);
             SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+
+            //To Visualize Close Colliders
+            gameObject.AddComponent<ColliderVisualizer>();
         }
         string demoFile = "OuterWilds_Demo" + DemoFileLoader.DEMO_FILE_EXTENSION;
         InputsCurveRecorder latestRecording;
