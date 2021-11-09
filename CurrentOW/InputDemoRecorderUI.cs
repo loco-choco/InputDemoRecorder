@@ -1,49 +1,32 @@
 ﻿using System.IO;
-using System.Reflection;
-using HarmonyLib;
-using BepInEx;
-
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace InputDemoRecorder
 {
-    [BepInPlugin("locochoco.plugins.InputDemoRecorder", MOD_NAME, MOD_VERSION)]
-    [BepInProcess("OuterWilds.exe")]
-    class InputDemoRecorderStart : BaseUnityPlugin
+    public class InputDemoRecorderUI
     {
-        const string MOD_VERSION = "1.0.1.0";
-        const string MOD_NAME = "OW Input Demo Recorder";
-        private static string gamePath;
-        public static string DllExecutablePath
+
+        public string demoFile { get; private set; } = "OuterWilds_Demo" + DemoFileLoader.DEMO_FILE_EXTENSION;
+        public bool playOnlyOnSceneLoad { get; private set; } = false;
+
+        public bool isRecording { get; private set; } = false;
+        public bool isPlayingback { get; private set; } = false;
+        public bool isPaused { get; private set; } = false;
+
+        public InputsCurveRecorder recordingToPlay { get; private set; }
+        public InputsCurveRecorder latestRecording { get; private set; }
+
+        public void PlayDemo(InputsCurveRecorder recording)
         {
-            get
+            if (!recording.IsEmpty())
             {
-                if (string.IsNullOrEmpty(gamePath))
-                    gamePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                return gamePath;
+                InputDemoPlayer.StartPlayback(recording);
+                InputChannelPatches.AllowChangeInputs(true);
+                isPlayingback = true;
             }
-            private set { }
         }
 
-        public void Awake()
-        {
-            var harmonyInstance = new Harmony("locochoco.InputDemoRecorder");
-            InputChannelPatches.DoPatches(harmonyInstance);
-            SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
-
-            //To Visualize Close Colliders
-            gameObject.AddComponent<ColliderVisualizer>();
-        }
-        string demoFile = "OuterWilds_Demo" + DemoFileLoader.DEMO_FILE_EXTENSION;
-        InputsCurveRecorder latestRecording;
-
-        Rect windowPositionAndScale = new Rect(200, 0, 240, 140);
-        private void OnGUI()
-        {
-            windowPositionAndScale = GUI.Window(0, windowPositionAndScale, PlayerUI, string.Format("{0} - v{1}", MOD_NAME, MOD_VERSION));
-        }
-        private void PlayerUI(int id)
+        public void PlayerUI(int id)
         {
             if (isRecording)
             {
@@ -72,7 +55,7 @@ namespace InputDemoRecorder
 
             if (GUI.Button(new Rect(0, 60, 240, 20), "Save Demo"))
             {
-                if (DemoFileLoader.SaveDemoFile(Path.Combine(DllExecutablePath, demoFile), latestRecording))
+                if (DemoFileLoader.SaveDemoFile(Path.Combine(InputDemoRecorderModStart.DllExecutablePath, demoFile), latestRecording))
                     Debug.Log(demoFile + " was saved");
             }
 
@@ -86,9 +69,9 @@ namespace InputDemoRecorder
                 bool canBePlayed = false;
 
                 if (extension == DemoFileLoader.DEMO_FILE_EXTENSION)
-                    canBePlayed = DemoFileLoader.LoadDemoFile(Path.Combine(DllExecutablePath, demoFile), out loadedDemo);
+                    canBePlayed = DemoFileLoader.LoadDemoFile(Path.Combine(InputDemoRecorderModStart.DllExecutablePath, demoFile), out loadedDemo);
                 else if (extension == TASFileLoader.TAS_FILE_EXTENSION)
-                    canBePlayed = TASFileLoader.LoadTASFile(Path.Combine(DllExecutablePath, demoFile), out loadedDemo);
+                    canBePlayed = TASFileLoader.LoadTASFile(Path.Combine(InputDemoRecorderModStart.DllExecutablePath, demoFile), out loadedDemo);
 
                 if (canBePlayed)
                 {
@@ -104,24 +87,7 @@ namespace InputDemoRecorder
             GUI.DragWindow();
         }
 
-        bool playOnlyOnSceneLoad = false;
-        InputsCurveRecorder recordingToPlay;
-        public void PlayDemo(InputsCurveRecorder recording)
-        {
-            if (!recording.IsEmpty())
-            {
-                InputDemoPlayer.StartPlayback(recording);
-                InputChannelPatches.AllowChangeInputs(true);
-                isPlayingback = true;
-            }
-        }
-        private void SceneManager_activeSceneChanged(Scene arg0, Scene arg1)
-        {
-            if (playOnlyOnSceneLoad)
-                PlayDemo(recordingToPlay);
-        }
-
-        bool isRecording = false;
+        
         private void RecordingGUI()
         {
             if (GUI.Button(new Rect(0, 20, 240, 20), "Stop Recording"))
@@ -133,8 +99,6 @@ namespace InputDemoRecorder
             GUI.Label(new Rect(0, 40, 240, 20), "Time: " + InputDemoRecorder.GetCurrentInputTime());
         }
 
-        bool isPlayingback = false;
-        bool isPaused = false;
         private void PlayingbackGUI()
         {
             if (GUI.Button(new Rect(0, 20, 240, 20), "Stop Playingback"))
