@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using HarmonyLib;
+
+using OWML.Common;
 using UnityEngine;
+using Harmony;
 
 namespace InputDemoRecorder
 {
     public class InputChannelPatches
     {
-        static readonly MethodInfo axisValueGetter = AccessTools.PropertyGetter(typeof(AbstractCommands), "AxisValue");
-        static readonly MethodInfo axisValueSetter = AccessTools.PropertySetter(typeof(AbstractCommands), "AxisValue");
+        static readonly MethodInfo axisValueGetter = AccessTools.Property(typeof(AbstractCommands), "AxisValue").GetMethod;
+        static readonly MethodInfo axisValueSetter = AccessTools.Property(typeof(AbstractCommands), "AxisValue").SetMethod;
 
-        static readonly MethodInfo isActiveThisFrameSetter = AccessTools.PropertySetter(typeof(AbstractCommands), "IsActiveThisFrame");
+        static readonly MethodInfo isActiveThisFrameSetter = AccessTools.Property(typeof(AbstractCommands), "IsActiveThisFrame").SetMethod;
 
         private static bool ChangeInputs = false;
 
@@ -22,13 +24,10 @@ namespace InputDemoRecorder
         public delegate void UpdateInputs();
         public static event UpdateInputs OnUpdateInputs;
 
-        static public void DoPatches(Harmony harmonyInstance)
+        static public void DoPatches(IHarmonyHelper harmonyInstance)
         {
-            HarmonyMethod inputManagerUpdatePrefix = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.UpdateInputsPrefix));
-            HarmonyMethod abstractCommandsUpdateTranspiler = new HarmonyMethod(typeof(InputChannelPatches), nameof(InputChannelPatches.AbstractCommandsUpdateTranspiler));
-
-            harmonyInstance.Patch(typeof(InputManager).GetMethod(nameof(InputManager.Update)), prefix: inputManagerUpdatePrefix);
-            harmonyInstance.Patch(typeof(AbstractCommands).GetMethod("Update"), transpiler: abstractCommandsUpdateTranspiler);
+            harmonyInstance.AddPrefix(typeof(InputManager).GetMethod(nameof(InputManager.Update)), typeof(InputChannelPatches), nameof(InputChannelPatches.UpdateInputsPrefix));
+            harmonyInstance.Transpile(typeof(AbstractCommands).GetMethod("Update"), typeof(InputChannelPatches), nameof(InputChannelPatches.AbstractCommandsUpdateTranspiler));
         }
 
         static void UpdateInputsPrefix()
