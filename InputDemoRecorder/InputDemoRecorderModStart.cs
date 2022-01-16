@@ -3,9 +3,6 @@ using System.Reflection;
 using OWML.ModHelper;
 using OWML.Common;
 
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
 namespace InputDemoRecorder
 {
     class InputDemoRecorderModStart : ModBehaviour
@@ -27,15 +24,21 @@ namespace InputDemoRecorder
 
         public void Start()
         {
-            InputChannelPatches.DoPatches(ModHelper.HarmonyHelper);
+            ModHelper.Console.WriteLine("Starting...");
+
+            ModHelper.Console.WriteLine("BBBB");
+            InputChannelPatches.DoPatches(ModHelper.HarmonyHelper, ModHelper.Console);
 
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) =>
             {
                 if (ui.playOnlyOnSceneLoad)
-                ui.PlayDemo(ui.recordingToPlay);
+                    ui.PlayDemo(ui.recordingToPlay);
             };
 
             ui = new InputDemoRecorderUI();
+        }
+        public override void Configure(IModConfig config)
+        {
         }
     }
 }

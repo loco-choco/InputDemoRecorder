@@ -42,11 +42,11 @@
           "dependencies": {
             "OWML": {
               "target": "Package",
-              "version": "[2.1.0, )"
+              "version": "[2.3.1, )"
             },
             "OuterWildsGameLibs": {
               "target": "Package",
-              "version": "[1.1.11.73, )"
+              "version": "[1.1.12.125, )"
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"

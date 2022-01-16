@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "DlMgD+vz4C4w7oulo88OK7GAJ5qEnmtqkWH2n5veqjs+CXTLiLmS9vIloYbUnl3lFrRnpHTuC2ZJQhY+m0Gj2w==",
+  "dgSpecHash": "wS8QWFsZIqVRcQuICAYqtKdgIPgcH+wBWRvdOgAdxnD+P4qdVvW4KPuSyDZHbkjR1HHM2VuOYQvtsHJ3eBneqQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Pichau\\Desktop\\programas\\InputDemoRecorder\\InputDemoRecorder\\InputDemoRecorder.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Pichau\\.nuget\\packages\\json.net.unity3d\\9.0.1\\json.net.unity3d.9.0.1.nupkg.sha512",
     "C:\\Users\\Pichau\\.nuget\\packages\\lib.harmony\\1.2.0.1\\lib.harmony.1.2.0.1.nupkg.sha512",
-    "C:\\Users\\Pichau\\.nuget\\packages\\outerwildsgamelibs\\1.1.11.73\\outerwildsgamelibs.1.1.11.73.nupkg.sha512",
-    "C:\\Users\\Pichau\\.nuget\\packages\\owml\\2.1.0\\owml.2.1.0.nupkg.sha512"
+    "C:\\Users\\Pichau\\.nuget\\packages\\outerwildsgamelibs\\1.1.12.125\\outerwildsgamelibs.1.1.12.125.nupkg.sha512",
+    "C:\\Users\\Pichau\\.nuget\\packages\\owml\\2.3.1\\owml.2.3.1.nupkg.sha512"
   ],
   "logs": []
 }

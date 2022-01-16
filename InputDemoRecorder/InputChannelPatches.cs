@@ -11,10 +11,8 @@ namespace InputDemoRecorder
 {
     public class InputChannelPatches
     {
-        static readonly MethodInfo axisValueGetter = AccessTools.Property(typeof(AbstractCommands), "AxisValue").GetMethod;
-        static readonly MethodInfo axisValueSetter = AccessTools.Property(typeof(AbstractCommands), "AxisValue").SetMethod;
-
-        static readonly MethodInfo isActiveThisFrameSetter = AccessTools.Property(typeof(AbstractCommands), "IsActiveThisFrame").SetMethod;
+        private static readonly PropertyInfo axisValue = AccessTools.Property(typeof(AbstractCommands), "AxisValue");
+        private static readonly PropertyInfo isActiveThisFrame = AccessTools.Property(typeof(AbstractCommands), "IsActiveThisFrame");
 
         private static bool ChangeInputs = false;
 
@@ -24,7 +22,7 @@ namespace InputDemoRecorder
         public delegate void UpdateInputs();
         public static event UpdateInputs OnUpdateInputs;
 
-        static public void DoPatches(IHarmonyHelper harmonyInstance)
+        static public void DoPatches(IHarmonyHelper harmonyInstance, IModConsole console)
         {
             harmonyInstance.AddPrefix(typeof(InputManager).GetMethod(nameof(InputManager.Update)), typeof(InputChannelPatches), nameof(InputChannelPatches.UpdateInputsPrefix));
             harmonyInstance.Transpile(typeof(AbstractCommands).GetMethod("Update"), typeof(InputChannelPatches), nameof(InputChannelPatches.AbstractCommandsUpdateTranspiler));
@@ -38,12 +36,12 @@ namespace InputDemoRecorder
         {
             if (ChangeInputs)
             {
-                Vector2 axisValue = (Vector2)axisValueGetter.Invoke(__instance, null);
-                InputChanger?.Invoke(__instance.CommandType, ref axisValue);
-                axisValueSetter.Invoke(__instance, new object[] { axisValue });
+                Vector2 axisValueV = (Vector2)axisValue.GetMethod.Invoke(__instance, null);
+                InputChanger?.Invoke(__instance.CommandType, ref axisValueV);
+                axisValue.SetMethod.Invoke(__instance, new object[] { axisValueV });
 
                 float comparer = (__instance.ValueType == InputConsts.InputValueType.DOUBLE_AXIS) ? float.Epsilon : __instance.PressedThreshold;
-                isActiveThisFrameSetter.Invoke(__instance, new object[] { axisValue.magnitude > comparer });
+                isActiveThisFrame.SetMethod.Invoke(__instance, new object[] { axisValueV.magnitude > comparer });
             }
         }
         public static void SetInputChanger(InputData inputChanger)

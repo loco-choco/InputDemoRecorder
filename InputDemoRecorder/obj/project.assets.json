@@ -20,7 +20,7 @@
           "lib/net472/0Harmony.dll": {}
         }
       },
-      "OuterWildsGameLibs/1.1.11.73": {
+      "OuterWildsGameLibs/1.1.12.125": {
         "type": "package",
         "compile": {
           "lib/Assembly-CSharp-firstpass.dll": {},
@@ -229,35 +229,35 @@
           "lib/netstandard.dll": {}
         }
       },
-      "OWML/2.1.0": {
+      "OWML/2.3.1": {
         "type": "package",
         "dependencies": {
           "Json.Net.Unity3D": "9.0.1",
           "Lib.Harmony": "1.2.0.1"
         },
         "compile": {
-          "lib/net40/NAudio-Unity.dll": {},
-          "lib/net40/OWML.Common.dll": {},
-          "lib/net40/OWML.Logging.dll": {},
-          "lib/net40/OWML.ModHelper.Assets.dll": {},
-          "lib/net40/OWML.ModHelper.Events.dll": {},
-          "lib/net40/OWML.ModHelper.Input.dll": {},
-          "lib/net40/OWML.ModHelper.Interaction.dll": {},
-          "lib/net40/OWML.ModHelper.Menus.dll": {},
-          "lib/net40/OWML.ModHelper.dll": {},
-          "lib/net40/OWML.Utils.dll": {}
+          "lib/net48/NAudio-Unity.dll": {},
+          "lib/net48/OWML.Common.dll": {},
+          "lib/net48/OWML.Logging.dll": {},
+          "lib/net48/OWML.ModHelper.Assets.dll": {},
+          "lib/net48/OWML.ModHelper.Events.dll": {},
+          "lib/net48/OWML.ModHelper.Input.dll": {},
+          "lib/net48/OWML.ModHelper.Interaction.dll": {},
+          "lib/net48/OWML.ModHelper.Menus.dll": {},
+          "lib/net48/OWML.ModHelper.dll": {},
+          "lib/net48/OWML.Utils.dll": {}
         },
         "runtime": {
-          "lib/net40/NAudio-Unity.dll": {},
-          "lib/net40/OWML.Common.dll": {},
-          "lib/net40/OWML.Logging.dll": {},
-          "lib/net40/OWML.ModHelper.Assets.dll": {},
-          "lib/net40/OWML.ModHelper.Events.dll": {},
-          "lib/net40/OWML.ModHelper.Input.dll": {},
-          "lib/net40/OWML.ModHelper.Interaction.dll": {},
-          "lib/net40/OWML.ModHelper.Menus.dll": {},
-          "lib/net40/OWML.ModHelper.dll": {},
-          "lib/net40/OWML.Utils.dll": {}
+          "lib/net48/NAudio-Unity.dll": {},
+          "lib/net48/OWML.Common.dll": {},
+          "lib/net48/OWML.Logging.dll": {},
+          "lib/net48/OWML.ModHelper.Assets.dll": {},
+          "lib/net48/OWML.ModHelper.Events.dll": {},
+          "lib/net48/OWML.ModHelper.Input.dll": {},
+          "lib/net48/OWML.ModHelper.Interaction.dll": {},
+          "lib/net48/OWML.ModHelper.Menus.dll": {},
+          "lib/net48/OWML.ModHelper.dll": {},
+          "lib/net48/OWML.Utils.dll": {}
         }
       }
     }
@@ -289,10 +289,10 @@
         "lib/net472/0Harmony.dll"
       ]
     },
-    "OuterWildsGameLibs/1.1.11.73": {
-      "sha512": "vgwxR91hosAX1NdenqBWhXDJcQTcPGzmZBISOpy/57HtuskFOsBXbowBwDTG6shMO0dOlb9oazvm7LxBWxa+iQ==",
+    "OuterWildsGameLibs/1.1.12.125": {
+      "sha512": "yGE8rg3cvynzh6LUhjlsZeYhcLX62NYu2SH6chb5r960Wc6OAz0tjKoCfpfjpLTEj+Q0J+Xqm18mSBKYph8+vQ==",
       "type": "package",
-      "path": "outerwildsgamelibs/1.1.11.73",
+      "path": "outerwildsgamelibs/1.1.12.125",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -397,36 +397,36 @@
         "lib/UnityEngine.dll",
         "lib/mscorlib.dll",
         "lib/netstandard.dll",
-        "outerwildsgamelibs.1.1.11.73.nupkg.sha512",
+        "outerwildsgamelibs.1.1.12.125.nupkg.sha512",
         "outerwildsgamelibs.nuspec"
       ]
     },
-    "OWML/2.1.0": {
-      "sha512": "YwbIQFOTp7mHCvVAoY82uzjinjmbvacTfxk761a+e3ertQqZF1W6PYf9CueN3EL3Z2g81+YJNyMrQPEOFEk8/w==",
+    "OWML/2.3.1": {
+      "sha512": "3admCthtNRSpG0SbsUEn1ZqqcqOC6pTSyoY+7tT0gH8E0fAL+DrhygAhFiCvm0Lh7EVWRyWKMkLRScU+dWYC2g==",
       "type": "package",
-      "path": "owml/2.1.0",
+      "path": "owml/2.3.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "lib/net40/NAudio-Unity.dll",
-        "lib/net40/OWML.Common.dll",
-        "lib/net40/OWML.Logging.dll",
-        "lib/net40/OWML.ModHelper.Assets.dll",
-        "lib/net40/OWML.ModHelper.Events.dll",
-        "lib/net40/OWML.ModHelper.Input.dll",
-        "lib/net40/OWML.ModHelper.Interaction.dll",
-        "lib/net40/OWML.ModHelper.Menus.dll",
-        "lib/net40/OWML.ModHelper.dll",
-        "lib/net40/OWML.Utils.dll",
-        "owml.2.1.0.nupkg.sha512",
+        "lib/net48/NAudio-Unity.dll",
+        "lib/net48/OWML.Common.dll",
+        "lib/net48/OWML.Logging.dll",
+        "lib/net48/OWML.ModHelper.Assets.dll",
+        "lib/net48/OWML.ModHelper.Events.dll",
+        "lib/net48/OWML.ModHelper.Input.dll",
+        "lib/net48/OWML.ModHelper.Interaction.dll",
+        "lib/net48/OWML.ModHelper.Menus.dll",
+        "lib/net48/OWML.ModHelper.dll",
+        "lib/net48/OWML.Utils.dll",
+        "owml.2.3.1.nupkg.sha512",
         "owml.nuspec"
       ]
     }
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.8": [
-      "OWML >= 2.1.0",
-      "OuterWildsGameLibs >= 1.1.11.73"
+      "OWML >= 2.3.1",
+      "OuterWildsGameLibs >= 1.1.12.125"
     ]
   },
   "packageFolders": {
@@ -470,11 +470,11 @@
         "dependencies": {
           "OWML": {
             "target": "Package",
-            "version": "[2.1.0, )"
+            "version": "[2.3.1, )"
           },
           "OuterWildsGameLibs": {
             "target": "Package",
-            "version": "[1.1.11.73, )"
+            "version": "[1.1.12.125, )"
           }
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
