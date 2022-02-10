@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace InputDemoRecorder
 {
+    //TODO descobir pq está dando erro de falta de memoria
     class TASFileLoader
     {
         public const string TAS_FILE_EXTENSION = ".txt";

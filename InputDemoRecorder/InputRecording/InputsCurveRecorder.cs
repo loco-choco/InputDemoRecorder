@@ -11,6 +11,8 @@ namespace InputDemoRecorder
         public static InputsCurveRecorder empty { get { return new InputsCurveRecorder() { InputCurves = new Dictionary<InputConsts.InputCommandType, AnimationCurve[]>() }; } }
         public bool IsEmpty()
         {
+            if(InputCurves == null)
+                return true;
             return InputCurves.Values.Count <= 0;
         }
         private void CreateKey(InputConsts.InputCommandType commandType, int size, out AnimationCurve[]  curves)

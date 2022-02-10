@@ -2,6 +2,18 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.8": {
+      "HarmonyX/2.9.0": {
+        "type": "package",
+        "dependencies": {
+          "MonoMod.RuntimeDetour": "22.1.29.1"
+        },
+        "compile": {
+          "lib/net45/0Harmony.dll": {}
+        },
+        "runtime": {
+          "lib/net45/0Harmony.dll": {}
+        }
+      },
       "Json.Net.Unity3D/9.0.1": {
         "type": "package",
         "compile": {
@@ -18,6 +30,52 @@
         },
         "runtime": {
           "lib/net472/0Harmony.dll": {}
+        }
+      },
+      "Mono.Cecil/0.11.4": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Mono.Cecil.Mdb.dll": {},
+          "lib/net40/Mono.Cecil.Pdb.dll": {},
+          "lib/net40/Mono.Cecil.Rocks.dll": {},
+          "lib/net40/Mono.Cecil.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Mono.Cecil.Mdb.dll": {},
+          "lib/net40/Mono.Cecil.Pdb.dll": {},
+          "lib/net40/Mono.Cecil.Rocks.dll": {},
+          "lib/net40/Mono.Cecil.dll": {}
+        }
+      },
+      "MonoMod.RuntimeDetour/22.1.29.1": {
+        "type": "package",
+        "dependencies": {
+          "Mono.Cecil": "0.11.4",
+          "MonoMod.Utils": "22.1.29.1"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ],
+        "compile": {
+          "lib/net452/MonoMod.RuntimeDetour.dll": {}
+        },
+        "runtime": {
+          "lib/net452/MonoMod.RuntimeDetour.dll": {}
+        }
+      },
+      "MonoMod.Utils/22.1.29.1": {
+        "type": "package",
+        "dependencies": {
+          "Mono.Cecil": "0.11.4"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ],
+        "compile": {
+          "lib/net452/MonoMod.Utils.dll": {}
+        },
+        "runtime": {
+          "lib/net452/MonoMod.Utils.dll": {}
         }
       },
       "OuterWildsGameLibs/1.1.12.125": {
@@ -263,6 +321,25 @@
     }
   },
   "libraries": {
+    "HarmonyX/2.9.0": {
+      "sha512": "vB03a0lJJefzSnPP8VJSzyTtgSx81dnxU2olfirHTBnbXY8Uc2BMoxCODPK1nzg4C53lQR0NOi+bp9170sYVFA==",
+      "type": "package",
+      "path": "harmonyx/2.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "harmonyx.2.9.0.nupkg.sha512",
+        "harmonyx.nuspec",
+        "lib/net35/0Harmony.dll",
+        "lib/net35/0Harmony.xml",
+        "lib/net45/0Harmony.dll",
+        "lib/net45/0Harmony.xml",
+        "lib/netstandard2.0/0Harmony.dll",
+        "lib/netstandard2.0/0Harmony.xml",
+        "logo_mini.png"
+      ]
+    },
     "Json.Net.Unity3D/9.0.1": {
       "sha512": "rp7q5dZ1SxGJU9NcDp60ERg0UnuqcjZBmVQsBn463yp429K2BsJHaN53iI7c7rsRvoSsGhz3SUHv+Lvd/TIz1A==",
       "type": "package",
@@ -287,6 +364,71 @@
         "lib/net35/0Harmony.dll",
         "lib/net45/0Harmony.dll",
         "lib/net472/0Harmony.dll"
+      ]
+    },
+    "Mono.Cecil/0.11.4": {
+      "sha512": "IC1h5g0NeJGHIUgzM1P82ld57knhP0IcQfrYITDPXlNpMYGUrsG5TxuaWTjaeqDNQMBDNZkB8L0rBnwsY6JHuQ==",
+      "type": "package",
+      "path": "mono.cecil/0.11.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/Mono.Cecil.Mdb.dll",
+        "lib/net40/Mono.Cecil.Mdb.pdb",
+        "lib/net40/Mono.Cecil.Pdb.dll",
+        "lib/net40/Mono.Cecil.Pdb.pdb",
+        "lib/net40/Mono.Cecil.Rocks.dll",
+        "lib/net40/Mono.Cecil.Rocks.pdb",
+        "lib/net40/Mono.Cecil.dll",
+        "lib/net40/Mono.Cecil.pdb",
+        "lib/netstandard2.0/Mono.Cecil.Mdb.dll",
+        "lib/netstandard2.0/Mono.Cecil.Mdb.pdb",
+        "lib/netstandard2.0/Mono.Cecil.Pdb.dll",
+        "lib/netstandard2.0/Mono.Cecil.Pdb.pdb",
+        "lib/netstandard2.0/Mono.Cecil.Rocks.dll",
+        "lib/netstandard2.0/Mono.Cecil.Rocks.pdb",
+        "lib/netstandard2.0/Mono.Cecil.dll",
+        "lib/netstandard2.0/Mono.Cecil.pdb",
+        "mono.cecil.0.11.4.nupkg.sha512",
+        "mono.cecil.nuspec"
+      ]
+    },
+    "MonoMod.RuntimeDetour/22.1.29.1": {
+      "sha512": "CksRFEGCPs8VGKe6pc3zsOPd2Jik+FMlmx5HDxWVTxz9JlAmWDk1+0PCwAVw4iGDuDZmIUjZDjhSACasyw9y/Q==",
+      "type": "package",
+      "path": "monomod.runtimedetour/22.1.29.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/MonoMod.RuntimeDetour.dll",
+        "lib/net35/MonoMod.RuntimeDetour.xml",
+        "lib/net452/MonoMod.RuntimeDetour.dll",
+        "lib/net452/MonoMod.RuntimeDetour.xml",
+        "lib/net5.0/MonoMod.RuntimeDetour.dll",
+        "lib/net5.0/MonoMod.RuntimeDetour.xml",
+        "lib/netstandard2.0/MonoMod.RuntimeDetour.dll",
+        "lib/netstandard2.0/MonoMod.RuntimeDetour.xml",
+        "monomod.runtimedetour.22.1.29.1.nupkg.sha512",
+        "monomod.runtimedetour.nuspec"
+      ]
+    },
+    "MonoMod.Utils/22.1.29.1": {
+      "sha512": "qKyM/JXIA3hr2BpE5LTtYfZvIFlcLB62pkORARRv0bXKSk1n23Nl3oAdYymQMjNfrhn/jCPZRqKDFftrYa1K2Q==",
+      "type": "package",
+      "path": "monomod.utils/22.1.29.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/MonoMod.Utils.dll",
+        "lib/net35/MonoMod.Utils.xml",
+        "lib/net452/MonoMod.Utils.dll",
+        "lib/net452/MonoMod.Utils.xml",
+        "lib/net5.0/MonoMod.Utils.dll",
+        "lib/net5.0/MonoMod.Utils.xml",
+        "lib/netstandard2.0/MonoMod.Utils.dll",
+        "lib/netstandard2.0/MonoMod.Utils.xml",
+        "monomod.utils.22.1.29.1.nupkg.sha512",
+        "monomod.utils.nuspec"
       ]
     },
     "OuterWildsGameLibs/1.1.12.125": {
@@ -425,6 +567,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.8": [
+      "HarmonyX >= 2.9.0",
       "OWML >= 2.3.1",
       "OuterWildsGameLibs >= 1.1.12.125"
     ]
@@ -468,6 +611,10 @@
       "net48": {
         "targetAlias": "net48",
         "dependencies": {
+          "HarmonyX": {
+            "target": "Package",
+            "version": "[2.9.0, )"
+          },
           "OWML": {
             "target": "Package",
             "version": "[2.3.1, )"

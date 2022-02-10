@@ -15,7 +15,12 @@
       "ProjectGuid": "8a39f9e7-1a89-430c-9c3e-bdfb3b7e17df",
       "DisplayName": "InputDemoRecorder",
       "ColorIndex": 1
+    },
+    "8034c813-8d42-464f-8f65-11d8f8c8c37b": {
+      "ProjectGuid": "8034c813-8d42-464f-8f65-11d8f8c8c37b",
+      "DisplayName": "AlphaInputDemoRecorder",
+      "ColorIndex": 2
     }
   },
-  "NextColorIndex": 2
+  "NextColorIndex": 3
 }

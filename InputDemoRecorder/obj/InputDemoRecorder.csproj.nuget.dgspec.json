@@ -40,6 +40,10 @@
         "net48": {
           "targetAlias": "net48",
           "dependencies": {
+            "HarmonyX": {
+              "target": "Package",
+              "version": "[2.9.0, )"
+            },
             "OWML": {
               "target": "Package",
               "version": "[2.3.1, )"
