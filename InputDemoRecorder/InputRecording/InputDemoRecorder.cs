@@ -5,11 +5,11 @@ namespace InputDemoRecorder
 {
     public static class InputDemoRecorder
     {
-        private static float currentInputTime;
-        private static float startRecordingTime;
+        private static int currentInputFrame = 0;
         private static InputsCurveRecorder recordedInputsCurve;
 
-        public static float GetCurrentInputTime() => currentInputTime;
+        public static float GetCurrentInputFrame() => currentInputFrame;
+        public static float GetLastInputFrame() => recordedInputsCurve.LastFrame();
 
         static InputDemoRecorder()
         {
@@ -18,7 +18,7 @@ namespace InputDemoRecorder
 
         private static void InputChannelPatches_OnUpdateInputs()
         {
-            currentInputTime = Time.unscaledTime - startRecordingTime;
+            currentInputFrame++;
         }
         public static void StartRecording()
         {
@@ -26,7 +26,7 @@ namespace InputDemoRecorder
 
             InputChannelPatches.SetInputChanger(RecordInputCommandValue);
 
-            startRecordingTime = Time.unscaledTime;
+            currentInputFrame = 0;
         }
 
         public static InputsCurveRecorder StopRecording()
@@ -35,10 +35,10 @@ namespace InputDemoRecorder
             return recordedInputsCurve;
         }
 
-        private static void RecordInputCommandValue(InputConsts.InputCommandType commandType, ref Vector2 axisValue)
+        private static void RecordInputCommandValue(AbstractCommands command, ref Vector2 axisValue)
         {
-            if (ChannelsToRecord.Contains(commandType))
-                recordedInputsCurve.AddValue(commandType, currentInputTime, axisValue.x, axisValue.y);
+            if (ChannelsToRecord.Contains(command.CommandType))
+                recordedInputsCurve.AddValue(command.CommandType, axisValue);
         }
         private static readonly HashSet<InputConsts.InputCommandType> ChannelsToRecord = new HashSet<InputConsts.InputCommandType>()
         {

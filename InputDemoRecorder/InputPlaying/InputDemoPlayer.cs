@@ -5,13 +5,12 @@ namespace InputDemoRecorder
 {
     public static class InputDemoPlayer
     {
-        private static float currentInputTime;
-        private static float startPlaybackTime;
+        private static int currentInputFrame = 0;
         private static bool isPaused = false;
         private static InputsCurveRecorder InputsCurve;
 
-        public static float GetCurrentInputTime() => currentInputTime;
-
+        public static int GetCurrentInputFrame() => currentInputFrame;
+        public static float GetLastInputFrame() => InputsCurve.LastFrame();
         static InputDemoPlayer()
         {
             InputChannelPatches.OnUpdateInputs += InputChannelPatches_OnUpdateInputs;
@@ -20,12 +19,12 @@ namespace InputDemoRecorder
         {
             InputChannelPatches.SetInputChanger(ReturnInputCommandValue);
             InputsCurve = demoFile;
-            startPlaybackTime = Time.unscaledTime;
+            currentInputFrame = 0;
             isPaused = false;
         }
-        public static void RestartPlayback(float startTime = 0f)
+        public static void RestartPlayback(int startFrame = 0)
         {
-            startPlaybackTime = Time.unscaledTime;
+            currentInputFrame = startFrame;
             isPaused = false;
         }
         public static void PausePlayback(bool resume = false)
@@ -40,21 +39,24 @@ namespace InputDemoRecorder
 
         private static void InputChannelPatches_OnUpdateInputs()
         {
-            if(!isPaused)
-                currentInputTime = Time.unscaledTime - startPlaybackTime;
+            if (!isPaused && currentInputFrame < InputsCurve.LastFrame())
+                currentInputFrame++;
         }
         
-        private static void ReturnInputCommandValue(InputConsts.InputCommandType commandType, ref Vector2 axisValue)
+        private static void ReturnInputCommandValue(AbstractCommands command, ref Vector2 axisValue)
         {
 
-            if (InputsCurve.InputCurves.TryGetValue(commandType, out var curves) && !isPaused)
+            if (InputsCurve.InputCurves.TryGetValue(command.CommandType, out var curve) && !isPaused)
             {
-                var input = new Vector2(curves[0].Evaluate(currentInputTime), curves[1].Evaluate(currentInputTime));
+                if (currentInputFrame < curve.Count)
+                {
+                    var input = curve[currentInputFrame];// new Vector2(curves[0].Evaluate(currentInputTime), curves[1].Evaluate(currentInputTime));
 
-                if (commandType != InputConsts.InputCommandType.PAUSE)
-                    axisValue = input;
-                else if (input.magnitude > float.Epsilon)
-                    axisValue = input;
+                    if (command.CommandType != InputConsts.InputCommandType.PAUSE)
+                        axisValue = input;
+                    else if (input.magnitude > float.Epsilon)
+                        axisValue = input;
+                }
             }
         }
     }

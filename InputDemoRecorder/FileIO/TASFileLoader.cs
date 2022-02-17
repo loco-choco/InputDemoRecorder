@@ -49,7 +49,7 @@ namespace InputDemoRecorder
                     }
                     Debug.Log(AxisValueToSet);
 
-                    loadedDemoFile.AddLineValue(inputCommandToChange, begginingTime, endTime, AxisValueToSet.x, AxisValueToSet.y);
+                    //loadedDemoFile.AddLineValue(inputCommandToChange, begginingTime, endTime, AxisValueToSet.x, AxisValueToSet.y);
                 }
             }
             return true;

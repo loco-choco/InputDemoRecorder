@@ -39,10 +39,9 @@ namespace InputDemoRecorder
             };
         }
 
-        public Rect windowRect = new Rect(0, 0, 240, 160);
         public void OnGUI()
         {
-            GUI.Window(0, windowRect, ui.PlayerUI, "Input Demo Recorder");
+            ui.OnGUI();
         }
         public void Update()
         {

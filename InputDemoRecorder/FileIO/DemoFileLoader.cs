@@ -16,7 +16,6 @@ namespace InputDemoRecorder
             BinaryWriter binaryWriter = new BinaryWriter(stream);
 
             //Metadata
-            binaryWriter.Write(Application.unityVersion); // Unity version
             binaryWriter.Write(DateTime.UtcNow.ToBinary()); //Time it was saved
 
             binaryWriter.Write(recordedFrameInputs.InputsCurveRecorderInBytes());
@@ -33,8 +32,6 @@ namespace InputDemoRecorder
             BinaryReader binaryReader = new BinaryReader(stream);
 
             //Metadata
-            string unityVersion = binaryReader.ReadString();
-            string demoName = binaryReader.ReadString();
             DateTime demoSaveTime = DateTime.FromBinary(binaryReader.ReadInt64());
 
             loadedDemoFile = InputsCurveRecorder.InputsCurveRecorderFromBytes(binaryReader);

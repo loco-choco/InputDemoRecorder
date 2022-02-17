@@ -90,6 +90,12 @@ namespace InputDemoRecorder
             return DemoFileLoader.SaveDemoFile(Path.Combine(InputDemoRecorderModStart.DllExecutablePath, demoFile), latestRecording);
         }
 
+        public Rect windowRect = new Rect(0, 0, 240, 160);
+        public void OnGUI() 
+        {
+            GUI.Window(0, windowRect, PlayerUI, "Input Demo Recorder");
+        }
+
         public void PlayerUI(int id)
         {
             if (isRecording)
@@ -131,7 +137,7 @@ namespace InputDemoRecorder
             if (GUI.Button(new Rect(0, 20, 240, 20), "Stop Recording (F3)"))
                 StopRecordingDemo();
 
-            GUI.Label(new Rect(0, 40, 240, 20), "Time: " + InputDemoRecorder.GetCurrentInputTime());
+            GUI.Label(new Rect(0, 40, 240, 20), $"Frame: {InputDemoRecorder.GetCurrentInputFrame()}");
         }
 
         private void PlayingbackGUI()
@@ -145,7 +151,7 @@ namespace InputDemoRecorder
             if (GUI.Button(new Rect(0, 60, 240, 20), (isPaused ? "Resume" : "Pause") + " Playback (F5)"))
                 TogglePauseDemoPlayback();
 
-            GUI.Label(new Rect(0, 80, 240, 20), "Time: " + InputDemoPlayer.GetCurrentInputTime());
+            GUI.Label(new Rect(0, 80, 240, 20), $"Frame: {InputDemoPlayer.GetCurrentInputFrame()} / {InputDemoPlayer.GetLastInputFrame()}");
         }
     }
 }

@@ -11,12 +11,9 @@ namespace InputDemoRecorder
 {
     public class InputChannelPatches
     {
-        private static readonly PropertyInfo axisValue = AccessTools.Property(typeof(AbstractCommands), "AxisValue");
-        private static readonly PropertyInfo isActiveThisFrame = AccessTools.Property(typeof(AbstractCommands), "IsActiveThisFrame");
-
         private static bool ChangeInputs = false;
 
-        public delegate void InputData(InputConsts.InputCommandType commandType, ref Vector2 value);
+        public delegate void InputData(AbstractCommands __instance, ref Vector2 value);
         private static InputData InputChanger;
 
         public delegate void UpdateInputs();
@@ -36,12 +33,12 @@ namespace InputDemoRecorder
         {
             if (ChangeInputs)
             {
-                Vector2 axisValueV = (Vector2)axisValue.GetMethod.Invoke(__instance, null);
-                InputChanger?.Invoke(__instance.CommandType, ref axisValueV);
-                axisValue.SetMethod.Invoke(__instance, new object[] { axisValueV });
+                Vector2 axisValue = __instance.AxisValue;
+                InputChanger?.Invoke(__instance, ref axisValue);
+                __instance.AxisValue = axisValue;
 
                 float comparer = (__instance.ValueType == InputConsts.InputValueType.DOUBLE_AXIS) ? float.Epsilon : __instance.PressedThreshold;
-                isActiveThisFrame.SetMethod.Invoke(__instance, new object[] { axisValueV.magnitude > comparer });
+                __instance.IsActiveThisFrame = axisValue.magnitude > comparer;
             }
         }
         public static void SetInputChanger(InputData inputChanger)
