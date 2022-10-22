@@ -1,5 +1,4 @@
-AlphaOW/bin
-AlphaOW/obj
-CurrentOW/bin
-CurrentOW/obj
-/.git
+**/bin
+**/obj
+.vs
+.git
