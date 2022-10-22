@@ -10,6 +10,7 @@ namespace InputDemoRecorder
         public string demoFile { get; private set; } = "OuterWilds_Demo" + DemoFileLoader.DEMO_FILE_EXTENSION;
         public bool playOnlyOnSceneLoad { get; private set; } = false;
         public bool recordOnSceneLoad { get; private set; } = false;
+        public bool applySeedOnSceneLoad { get; private set; } = false;
 
         public bool isRecording { get; private set; } = false;
         public bool isPlayingback { get; private set; } = false;
@@ -32,6 +33,7 @@ namespace InputDemoRecorder
 
         public void TogglePlayOnSceneLoad() => playOnlyOnSceneLoad = !playOnlyOnSceneLoad;
         public void ToggleRecordOnSceneLoad() => recordOnSceneLoad = !recordOnSceneLoad;
+        public void TogglApplySeedOnSceneLoad() => applySeedOnSceneLoad = !applySeedOnSceneLoad;
         public void RecordDemo(int seed) 
         {
             InputDemoRecorder.StartRecording(seed);
@@ -93,7 +95,7 @@ namespace InputDemoRecorder
             return DemoFileLoader.SaveDemoFile(Path.Combine(InputDemoRecorderModStart.DllExecutablePath, demoFile), latestRecording);
         }
 
-        public Rect windowRect = new Rect(0, 0, 240, 180);
+        public Rect windowRect = new Rect(0, 0, 240, 200);
         public void OnGUI() 
         {
             GUI.Window(0, windowRect, PlayerUI, "Input Demo Recorder");
@@ -120,7 +122,6 @@ namespace InputDemoRecorder
             if (GUI.Button(new Rect(0, 40, 240, 20), "Record (F3)"))
                 RecordDemo(seed);
 
-
             if (GUI.Button(new Rect(0, 60, 240, 20), "Play Recorded Demo (F4)"))
                 PlayRecordedDemo();
 
@@ -136,6 +137,8 @@ namespace InputDemoRecorder
             playOnlyOnSceneLoad = GUI.Toggle(new Rect(0, 140, 240, 20), playOnlyOnSceneLoad, "Play Only On Scene Load (F7)");
 
             recordOnSceneLoad = GUI.Toggle(new Rect(0, 160, 240, 20), recordOnSceneLoad, "Start Recording On Scene Load (F8)");
+
+            applySeedOnSceneLoad = GUI.Toggle(new Rect(0, 180, 240, 20), applySeedOnSceneLoad, "Apply Seed On Scene Load (F9)");
 
             GUI.DragWindow();
         }

@@ -31,6 +31,9 @@ namespace InputDemoRecorder
             ui = new InputDemoRecorderUI();
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) =>
             {
+                if (ui.applySeedOnSceneLoad)
+                    Random.InitState(ui.seed);
+
                 if (ui.playOnlyOnSceneLoad)
                     ui.PlayDemo(ui.recordingToPlay);
                 else if (ui.recordOnSceneLoad)
@@ -75,6 +78,9 @@ namespace InputDemoRecorder
 
             if (DebugKeyCode.GetKeyDown(KeyCode.F8))
                 ui.ToggleRecordOnSceneLoad();
+
+            if (DebugKeyCode.GetKeyDown(KeyCode.F9))
+                ui.TogglApplySeedOnSceneLoad();
         }
         public void RecordingInputUpdate()
         {
