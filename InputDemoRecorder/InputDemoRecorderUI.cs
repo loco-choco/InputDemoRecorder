@@ -114,7 +114,8 @@ namespace InputDemoRecorder
                 return;
             }
 
-            string seedString = GUI.TextField(new Rect(0, 20, 240, 20), seed.ToString());
+            GUI.Label(new Rect(0, 20,50, 20), " Seed:");
+            string seedString = GUI.TextField(new Rect(50, 20, 190, 20), seed.ToString());
 
             int.TryParse(seedString, out int newSeed);
             seed = newSeed;
