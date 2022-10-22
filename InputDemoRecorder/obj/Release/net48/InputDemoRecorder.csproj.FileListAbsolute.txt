@@ -1,9 +1,0 @@
-C:\Users\Pichau\Desktop\programas\InputDemoRecorder\InputDemoRecorder\obj\Release\net48\InputDemoRecorder.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Pichau\Desktop\programas\InputDemoRecorder\InputDemoRecorder\obj\Release\net48\InputDemoRecorder.AssemblyInfoInputs.cache
-C:\Users\Pichau\Desktop\programas\InputDemoRecorder\InputDemoRecorder\obj\Release\net48\InputDemoRecorder.AssemblyInfo.cs
-C:\Users\Pichau\Desktop\programas\InputDemoRecorder\InputDemoRecorder\obj\Release\net48\InputDemoRecorder.csproj.CoreCompileInputs.cache
-C:\Users\Pichau\AppData\Roaming\OuterWildsModManager\OWML\Mods\Locochoco.InputDemoRecorder\default-config.json
-C:\Users\Pichau\AppData\Roaming\OuterWildsModManager\OWML\Mods\Locochoco.InputDemoRecorder\manifest.json
-C:\Users\Pichau\AppData\Roaming\OuterWildsModManager\OWML\Mods\Locochoco.InputDemoRecorder\InputDemoRecorder.dll
-C:\Users\Pichau\Desktop\programas\InputDemoRecorder\InputDemoRecorder\obj\Release\net48\InputDemoRecorder.dll
-C:\Users\Pichau\Desktop\programas\InputDemoRecorder\InputDemoRecorder\obj\Release\net48\InputDemoRecorder.csproj.AssemblyReference.cache
