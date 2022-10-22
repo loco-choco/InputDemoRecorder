@@ -57,23 +57,17 @@ namespace InputDemoRecorder
 
         static IEnumerable<CodeInstruction> AbstractCommandsUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            int index = -1;
-            var codes = new List<CodeInstruction>(instructions);
-            for (var i = 0; i < codes.Count; i++)
-            {
-                if (codes[i].opcode == OpCodes.Ldc_I4_0 && codes[i + 1].opcode == OpCodes.Call && codes[i + 2].opcode == OpCodes.Ldarg_0 && codes[i + 3].opcode == OpCodes.Callvirt)
-                {
-                    index = i + 4;
-                    break;
-                }
-            }
-            if (index > -1)
-            {
-                codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
-                var method = AccessTools.Method(typeof(InputChannelPatches), nameof(InputChannelPatches.SetInputValue), new Type[] { typeof(AbstractCommands) });
-                codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, method));
-            }
-            return codes;
+            return new CodeMatcher(instructions)
+                .MatchForward(true,
+                    new CodeMatch(OpCodes.Ldc_I4_0),
+                    new CodeMatch(OpCodes.Call),
+                    new CodeMatch(OpCodes.Ldarg_0),
+                    new CodeMatch(OpCodes.Callvirt)
+                 ).Advance(1)
+                 .Insert(
+                    new CodeInstruction(OpCodes.Ldarg_0),
+                    CodeInstruction.Call(typeof(InputChannelPatches), nameof(InputChannelPatches.SetInputValue), new Type[] { typeof(AbstractCommands) })
+                 ).InstructionEnumeration();
         }
     }
 }
