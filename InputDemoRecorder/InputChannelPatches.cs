@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Reflection.Emit;
 
 using OWML.Common;
@@ -9,6 +8,7 @@ using HarmonyLib;
 
 namespace InputDemoRecorder
 {
+    [HarmonyPatch]
     public class InputChannelPatches
     {
         private static bool ChangeInputs = false;
@@ -19,12 +19,8 @@ namespace InputDemoRecorder
         public delegate void UpdateInputs();
         public static event UpdateInputs OnUpdateInputs;
 
-        static public void DoPatches(IHarmonyHelper harmonyInstance, IModConsole console)
-        {
-            harmonyInstance.AddPrefix(typeof(InputManager).GetMethod(nameof(InputManager.Update)), typeof(InputChannelPatches), nameof(InputChannelPatches.UpdateInputsPrefix));
-            harmonyInstance.Transpile(typeof(AbstractCommands).GetMethod("Update"), typeof(InputChannelPatches), nameof(InputChannelPatches.AbstractCommandsUpdateTranspiler));
-        }
-
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(InputManager), nameof(InputManager.Update))]
         static void UpdateInputsPrefix()
         {
             OnUpdateInputs?.Invoke();
@@ -55,6 +51,8 @@ namespace InputDemoRecorder
             InputChanger = null;
         }
 
+        [HarmonyTranspiler]
+        [HarmonyPatch(typeof(AbstractCommands), nameof(AbstractCommands.Update))]
         static IEnumerable<CodeInstruction> AbstractCommandsUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             return new CodeMatcher(instructions)

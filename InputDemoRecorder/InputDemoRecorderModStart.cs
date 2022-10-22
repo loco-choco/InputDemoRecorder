@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Reflection;
+﻿using HarmonyLib;
 using UnityEngine;
 using OWML.ModHelper;
 using OWML.Common;
@@ -27,7 +26,7 @@ namespace InputDemoRecorder
         public void Start()
         {
             instance = this;
-            InputChannelPatches.DoPatches(ModHelper.HarmonyHelper, ModHelper.Console);
+            new Harmony("locochoco.inputDemoRecorder.com").PatchAll();
 
             ui = new InputDemoRecorderUI();
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) =>
