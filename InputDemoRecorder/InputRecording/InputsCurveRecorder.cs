@@ -11,6 +11,8 @@ namespace InputDemoRecorder
 
         public Dictionary<InputConsts.InputCommandType, List<Vector2>> InputCurves;
 
+        public int Seed;
+
         public static InputsCurveRecorder empty => new InputsCurveRecorder() { InputCurves = new Dictionary<InputConsts.InputCommandType, List<Vector2>>() };
         public bool IsEmpty()
         {
@@ -51,6 +53,9 @@ namespace InputDemoRecorder
         public static InputsCurveRecorder InputsCurveRecorderFromBytes(BinaryReader reader)
         {
             InputsCurveRecorder inputsCurveRecorder = empty;
+
+            inputsCurveRecorder.Seed = reader.ReadInt32();
+
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
@@ -74,6 +79,8 @@ namespace InputDemoRecorder
         {
             var stream = new MemoryStream();
             BinaryWriter binaryWriter = new BinaryWriter(stream);
+
+            binaryWriter.Write(Seed);
 
             binaryWriter.Write(InputCurves.Count);
             foreach (var pair in InputCurves)

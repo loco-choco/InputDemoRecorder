@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
-using OWML.Common;
 using UnityEngine;
 using HarmonyLib;
 

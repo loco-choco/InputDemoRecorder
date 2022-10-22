@@ -34,7 +34,7 @@ namespace InputDemoRecorder
                 if (ui.playOnlyOnSceneLoad)
                     ui.PlayDemo(ui.recordingToPlay);
                 else if (ui.recordOnSceneLoad)
-                    ui.RecordDemo();
+                    ui.RecordDemo(ui.seed);
             };
         }
 
@@ -59,7 +59,7 @@ namespace InputDemoRecorder
         public void MainMenuInputUpdate() 
         {
             if (DebugKeyCode.GetKeyUp(KeyCode.F3))
-                ui.RecordDemo();
+                ui.RecordDemo(ui.seed);
 
             if (DebugKeyCode.GetKeyDown(KeyCode.F4))
                 ui.PlayRecordedDemo();

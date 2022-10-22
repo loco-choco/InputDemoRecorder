@@ -11,6 +11,7 @@ namespace InputDemoRecorder
 
         public static int GetCurrentInputFrame() => currentInputFrame;
         public static float GetLastInputFrame() => InputsCurve.LastFrame();
+        public static float GetSeed() => InputsCurve.Seed;
         static InputDemoPlayer()
         {
             InputChannelPatches.OnUpdateInputs += InputChannelPatches_OnUpdateInputs;
@@ -19,6 +20,9 @@ namespace InputDemoRecorder
         {
             InputChannelPatches.SetInputChanger(ReturnInputCommandValue);
             InputsCurve = demoFile;
+
+            Random.InitState(demoFile.Seed);
+
             currentInputFrame = 0;
             isPaused = false;
         }

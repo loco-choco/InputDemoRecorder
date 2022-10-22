@@ -20,9 +20,10 @@ namespace InputDemoRecorder
         {
             currentInputFrame++;
         }
-        public static void StartRecording()
+        public static void StartRecording(int seed)
         {
             recordedInputsCurve = InputsCurveRecorder.empty;
+            recordedInputsCurve.Seed = seed;
 
             InputChannelPatches.SetInputChanger(RecordInputCommandValue);
 

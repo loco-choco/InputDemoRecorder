@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEngine;
 
 namespace InputDemoRecorder
@@ -13,6 +14,8 @@ namespace InputDemoRecorder
         public bool isRecording { get; private set; } = false;
         public bool isPlayingback { get; private set; } = false;
         public bool isPaused { get; private set; } = false;
+
+        public int seed { get; private set; } = (int)DateTime.Now.Ticks;
 
         public InputsCurveRecorder recordingToPlay { get; private set; } = InputsCurveRecorder.empty;
         public InputsCurveRecorder latestRecording { get; private set; } = InputsCurveRecorder.empty;
@@ -29,9 +32,9 @@ namespace InputDemoRecorder
 
         public void TogglePlayOnSceneLoad() => playOnlyOnSceneLoad = !playOnlyOnSceneLoad;
         public void ToggleRecordOnSceneLoad() => recordOnSceneLoad = !recordOnSceneLoad;
-        public void RecordDemo() 
+        public void RecordDemo(int seed) 
         {
-            InputDemoRecorder.StartRecording();
+            InputDemoRecorder.StartRecording(seed);
             InputChannelPatches.AllowChangeInputs(true);
             isRecording = true;
         }
@@ -63,7 +66,7 @@ namespace InputDemoRecorder
             InputDemoPlayer.PausePlayback(isPaused);
             isPaused = !isPaused;
         }
-        
+
         public void PlayTASOrDemoFile()
         {
             string extension = Path.GetExtension(demoFile);
@@ -90,7 +93,7 @@ namespace InputDemoRecorder
             return DemoFileLoader.SaveDemoFile(Path.Combine(InputDemoRecorderModStart.DllExecutablePath, demoFile), latestRecording);
         }
 
-        public Rect windowRect = new Rect(0, 0, 240, 160);
+        public Rect windowRect = new Rect(0, 0, 240, 180);
         public void OnGUI() 
         {
             GUI.Window(0, windowRect, PlayerUI, "Input Demo Recorder");
@@ -109,24 +112,30 @@ namespace InputDemoRecorder
                 return;
             }
 
-            if (GUI.Button(new Rect(0, 20, 240, 20), "Record (F3)"))
-                RecordDemo();
+            string seedString = GUI.TextField(new Rect(0, 20, 240, 20), seed.ToString());
+
+            int.TryParse(seedString, out int newSeed);
+            seed = newSeed;
+
+            if (GUI.Button(new Rect(0, 40, 240, 20), "Record (F3)"))
+                RecordDemo(seed);
 
 
-            if (GUI.Button(new Rect(0, 40, 240, 20), "Play Recorded Demo (F4)"))
+            if (GUI.Button(new Rect(0, 60, 240, 20), "Play Recorded Demo (F4)"))
                 PlayRecordedDemo();
 
-            if (GUI.Button(new Rect(0, 60, 240, 20), "Save Demo (F5)"))
+            if (GUI.Button(new Rect(0, 80, 240, 20), "Save Demo (F5)"))
                 SaveRecordedDemo();
 
-            demoFile = GUI.TextField(new Rect(0, 80, 240, 20), demoFile);
 
-            if (GUI.Button(new Rect(0, 100, 240, 20), "Play Saved Demo/TAS (F6)"))
+            demoFile = GUI.TextField(new Rect(0, 100, 240, 20), demoFile);
+
+            if (GUI.Button(new Rect(0, 120, 240, 20), "Play Saved Demo/TAS (F6)"))
                 PlayTASOrDemoFile();
 
-            playOnlyOnSceneLoad = GUI.Toggle(new Rect(0, 120, 240, 20), playOnlyOnSceneLoad, "Play Only On Scene Load (F7)");
+            playOnlyOnSceneLoad = GUI.Toggle(new Rect(0, 140, 240, 20), playOnlyOnSceneLoad, "Play Only On Scene Load (F7)");
 
-            recordOnSceneLoad = GUI.Toggle(new Rect(0, 140, 240, 20), recordOnSceneLoad, "Start Recording On Scene Load (F8)");
+            recordOnSceneLoad = GUI.Toggle(new Rect(0, 160, 240, 20), recordOnSceneLoad, "Start Recording On Scene Load (F8)");
 
             GUI.DragWindow();
         }
@@ -137,6 +146,7 @@ namespace InputDemoRecorder
             if (GUI.Button(new Rect(0, 20, 240, 20), "Stop Recording (F3)"))
                 StopRecordingDemo();
 
+            GUI.Label(new Rect(0, 80, 240, 20), $"Seed: {InputDemoPlayer.GetSeed()}");
             GUI.Label(new Rect(0, 40, 240, 20), $"Frame: {InputDemoRecorder.GetCurrentInputFrame()}");
         }
 
@@ -151,7 +161,8 @@ namespace InputDemoRecorder
             if (GUI.Button(new Rect(0, 60, 240, 20), (isPaused ? "Resume" : "Pause") + " Playback (F5)"))
                 TogglePauseDemoPlayback();
 
-            GUI.Label(new Rect(0, 80, 240, 20), $"Frame: {InputDemoPlayer.GetCurrentInputFrame()} / {InputDemoPlayer.GetLastInputFrame()}");
+            GUI.Label(new Rect(0, 80, 240, 20), $"Seed: {InputDemoPlayer.GetSeed()}");
+            GUI.Label(new Rect(0, 100, 240, 20), $"Frame: {InputDemoPlayer.GetCurrentInputFrame()} / {InputDemoPlayer.GetLastInputFrame()}");
         }
     }
 }
