@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+
 namespace InputDemoRecorder
 {
     //TODO descobir pq está dando erro de falta de memoria
@@ -14,42 +15,48 @@ namespace InputDemoRecorder
         {
             string[] linesOfTheFile = File.ReadAllLines(fileName);
             loadedDemoFile = InputsCurveRecorder.empty;
-            Debug.Log(linesOfTheFile.Length);
             for (int i = 0; i < linesOfTheFile.Length; i++)
             {
                 string trimmedString = linesOfTheFile[i].Trim();
                 if(trimmedString.Length <= 0)
                 {
                 }
-                else if(trimmedString[0] != '#') // The # is for comments inside the file, but they must be in the beggining of the line
+                else if(trimmedString[0] != '#')
                 {
-                    Debug.Log(trimmedString);
+                    //InputDemoRecorderModStart.Instance.ModHelper.Console.WriteLine(trimmedString);
                     string[] dataInTheLine = trimmedString.Split(new string[] { " ", "- " }, StringSplitOptions.RemoveEmptyEntries);
-                    
-                    float begginingTime = float.Parse(dataInTheLine[0], System.Globalization.NumberStyles.Float);
-                    Debug.Log(begginingTime);
 
-                    float endTime = float.Parse(dataInTheLine[1], System.Globalization.NumberStyles.Float);
-                    Debug.Log(endTime);
-
-                    InputConsts.InputCommandType inputCommandToChange = StringToInputCommandType[dataInTheLine[2]];
-                    Debug.Log(inputCommandToChange);
-
-                    Vector2 AxisValueToSet;
-
-                    Debug.Log(dataInTheLine[3]);
-                    if (float.TryParse(dataInTheLine[3], out float firstValue))
+                    if (dataInTheLine[0].ToLower() == "seed")
                     {
-                        AxisValueToSet = new Vector2(firstValue, float.Parse(dataInTheLine[4], System.Globalization.NumberStyles.Float));
+                        int seedValue = int.Parse(dataInTheLine[1], System.Globalization.NumberStyles.Integer);
+                        loadedDemoFile.Seed = seedValue;
                     }
-                    else if (!StringToAxisValue.TryGetValue(dataInTheLine[3], out AxisValueToSet))
+                    else
                     {
-                        Debug.Log(string.Format("Invalid value keywork in line {0}", i));
-                        return false;
-                    }
-                    Debug.Log(AxisValueToSet);
+                        float begginingTime = float.Parse(dataInTheLine[0], System.Globalization.NumberStyles.Float);
+                        //InputDemoRecorderModStart.Instance.ModHelper.Console.WriteLine(begginingTime.ToString());
 
-                    //loadedDemoFile.AddLineValue(inputCommandToChange, begginingTime, endTime, AxisValueToSet.x, AxisValueToSet.y);
+                        float endTime = float.Parse(dataInTheLine[1], System.Globalization.NumberStyles.Float);
+                        //InputDemoRecorderModStart.Instance.ModHelper.Console.WriteLine(endTime.ToString());
+
+                        InputConsts.InputCommandType inputCommandToChange = StringToInputCommandType[dataInTheLine[2]];
+                        //InputDemoRecorderModStart.Instance.ModHelper.Console.WriteLine(inputCommandToChange.ToString());
+
+                        Vector2 AxisValueToSet;
+
+                        //InputDemoRecorderModStart.Instance.ModHelper.Console.WriteLine(dataInTheLine[3]);
+                        if (float.TryParse(dataInTheLine[3], out float firstValue))
+                        {
+                            AxisValueToSet = new Vector2(firstValue, float.Parse(dataInTheLine[4], System.Globalization.NumberStyles.Float));
+                        }
+                        else if (!StringToAxisValue.TryGetValue(dataInTheLine[3], out AxisValueToSet))
+                        {
+                            InputDemoRecorderModStart.Instance.ModHelper.Console.WriteLine(string.Format("Invalid value keywork in line {0}", i));
+                            return false;
+                        }
+                        //InputDemoRecorderModStart.Instance.ModHelper.Console.WriteLine(AxisValueToSet.ToString());
+                        loadedDemoFile.AddLineValue(inputCommandToChange, begginingTime, endTime, AxisValueToSet);
+                    }
                 }
             }
             return true;

@@ -7,7 +7,7 @@ namespace InputDemoRecorder
 {
     class InputDemoRecorderModStart : ModBehaviour
     {
-        private static InputDemoRecorderModStart instance;
+        public static InputDemoRecorderModStart Instance;
         private static string gamePath;
 
         public static string DllExecutablePath
@@ -15,7 +15,7 @@ namespace InputDemoRecorder
             get
             {
                 if (string.IsNullOrEmpty(gamePath))
-                    gamePath = instance.ModHelper.Manifest.ModFolderPath;
+                    gamePath = Instance.ModHelper.Manifest.ModFolderPath;
                 return gamePath;
             }
             private set { }
@@ -25,7 +25,7 @@ namespace InputDemoRecorder
 
         public void Start()
         {
-            instance = this;
+            Instance = this;
             new Harmony("locochoco.inputDemoRecorder.com").PatchAll();
 
             ui = new InputDemoRecorderUI();

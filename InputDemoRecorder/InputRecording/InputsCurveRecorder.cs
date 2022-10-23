@@ -37,18 +37,34 @@ namespace InputDemoRecorder
 
             lastFrame = (lastFrame < curves.Count) ? curves.Count : lastFrame;
         }
-        public void AddLineValue(InputConsts.InputCommandType commandType, int begginingFrame, int endFrame, Vector2 value)
+        public void AddLineValue(InputConsts.InputCommandType commandType, float begginingTime, float endTime, Vector2 value)
         {
-            //CreateKey(commandType, values.Length, out var curves);
-            //for (int i = 0; i < curves.Length && i < values.Length; i++)
-            //{
-            //    //Padding to make them "square waves"
-            //    curves[i].AddKey(begginingTime - Time.unscaledDeltaTime / 2f, 0f);
-            //    curves[i].AddKey(endTime + Time.unscaledDeltaTime / 2f, 0f);
+            CreateKey(commandType, out var curves);
+            int initialFrame = (int) (begginingTime / Time.unscaledDeltaTime);
+            int endFrame = (int) (endTime / Time.unscaledDeltaTime);
 
-            //    curves[i].AddKey(begginingTime, values[i]);
-            //    curves[i].AddKey(endTime, values[i]);
-            //}
+            if (initialFrame >= curves.Count - 1) //If curves isn't big enough to have initialFrame, we pad with zeros
+            {
+                int j = curves.Count;
+                while (j < initialFrame)
+                {
+                    curves.Add(Vector2.zero);
+                    j++;
+                }
+            }
+            int i = initialFrame;
+
+            while (i <= endFrame && i < curves.Count)
+            {
+                curves[i] = value;
+                i++;
+            }
+            while (i < endFrame) //This means that we need to make curves bigger
+            {
+                curves.Add(value);
+                i++;
+            }
+            lastFrame = (lastFrame < curves.Count) ? curves.Count : lastFrame;
         }
         public static InputsCurveRecorder InputsCurveRecorderFromBytes(BinaryReader reader)
         {
